@@ -1,0 +1,68 @@
+local bullet = require("elements/bullet")
+
+local ply = {}
+
+ply.x = 20
+ply.y = 60
+ply.radius = 10
+ply.speed = 5
+ply.shoot_delay = 0.1
+ply.next_attack = 0
+
+---Returns the x and y Position of a Player
+---@return integer
+---@return integer
+function ply:GetPos()
+	return self.x, self.y
+end
+
+---Returns if player can shoot
+---@return boolean
+function ply:CanAttack()
+	local bCanAttack = true
+
+	if love.timer.getTime() < self.next_attack then
+		bCanAttack = false
+	end
+
+	return bCanAttack
+end
+
+function ply:ApplyMovement(dt)
+	if love.keyboard.isDown("up", "w") then
+		ply.y = ply.y - ply.speed
+	end
+
+	if love.keyboard.isDown("left", "a") then
+		ply.x = ply.x - ply.speed
+	end
+
+	if love.keyboard.isDown("right", "d") then
+		ply.x = ply.x + ply.speed
+	end
+
+	if love.keyboard.isDown("down", "s") then
+		ply.y = ply.y + ply.speed
+	end
+
+	if love.keyboard.isDown("space") then
+		if self:CanAttack() then
+			self.next_attack = love.timer.getTime() + self.shoot_delay
+			bullet:Create(self, {1, 1}, 2) -- TODO: Get direction from mouseposition
+		end
+	end
+
+	local radius = self.radius
+	self.x = math.Clamp(self.x, 0 + radius, 1024 - radius)
+	self.y = math.Clamp(self.y, 0 + radius, 768 - radius)
+end
+
+function ply:Update(dt)
+	self:ApplyMovement(dt)
+end
+
+function ply:Draw()
+	love.graphics.circle("fill", self.x, self.y, self.radius)
+end
+
+return ply
