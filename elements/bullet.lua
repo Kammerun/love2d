@@ -1,6 +1,7 @@
 local bullet = {}
 local bullets = {}
 
+local BulletObject = require("meta/bullet_meta")
 
 ---Creates a bullet with given Arguments
 ---@param owner any
@@ -9,19 +10,22 @@ local bullets = {}
 function bullet:Create(owner, direction, radius)
     if not owner then return end
 
-    -- validcheck the direction
-    if #direction ~= 2 then error("Direction of Bullet must be a Vector of 2 integers") end
-    if type(direction[1]) ~= "number" or type(direction[2]) ~= "number" then error("Direction is not an integer!") end
-    
+    if #direction ~= 2 then error("Direction must be a 2D vector") end
+
     local x, y = owner:GetPos()
 
-    table.insert(bullets, {
+    local newBullet = setmetatable({
         owner = owner,
         direction = direction,
         x = x,
         y = y,
-        radius = radius
-    })
+        radius = radius,
+        speed = 1
+    }, BulletObject)
+
+    table.insert(bullets, newBullet)
+
+    return newBullet
 end
 
 ---Checks if bullet is in window and deletes if not
@@ -50,17 +54,15 @@ function bullet:CheckInBounds()
 end
 
 function bullet:Update()
-    for k, bullet in pairs(bullets) do
-        bullet.x = bullet.x + bullet.direction[1]
-        bullet.y = bullet.y + bullet.direction[2]
+    for i, b in ipairs(bullets) do
+        b:Update()
     end
-    
     self:CheckInBounds()
 end
 
 function bullet:Draw()
-    for k, bullet in pairs(bullets) do
-        love.graphics.circle("fill", bullet.x, bullet.y, bullet.radius)
+    for _, b in ipairs(bullets) do
+        love.graphics.circle("fill", b.x, b.y, b.radius)
     end
 end
 

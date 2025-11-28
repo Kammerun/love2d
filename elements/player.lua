@@ -28,6 +28,27 @@ function ply:CanAttack()
 	return bCanAttack
 end
 
+---Returnes a Vector with the directions the mouse is in relation to the player
+---@return table
+function ply:GetLookingAtVector()
+	local mx, my = love.mouse.getPosition()
+	local px, py = self:GetPos()
+	
+	local dx = mx - px
+    local dy = my - py
+
+    if dx == 0 and dy == 0 then
+        return {0, 0}
+    end
+
+    local theta = math.atan2(dy, dx)
+
+    local dirX = math.cos(theta)
+    local dirY = math.sin(theta)
+
+    return {dirX, dirY}
+end
+
 function ply:ApplyMovement(dt)
 	if love.keyboard.isDown("up", "w") then
 		ply.y = ply.y - ply.speed
@@ -48,7 +69,13 @@ function ply:ApplyMovement(dt)
 	if love.keyboard.isDown("space") then
 		if self:CanAttack() then
 			self.next_attack = love.timer.getTime() + self.shoot_delay
-			bullet:Create(self, {1, 1}, 2) -- TODO: Get direction from mouseposition
+
+			local direction = self:GetLookingAtVector()
+			local size = 2
+
+			local b = bullet:Create(self, direction, size)
+			if not b then return end
+			b:SetSpeed(3)
 		end
 	end
 
