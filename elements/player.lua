@@ -1,20 +1,14 @@
 local bullet = require("elements/bullet")
+local entity_meta = require("meta/entity_meta")
 
-local ply = {}
+local ply = setmetatable({}, entity_meta)
+if not ply then return end -- this better not be happening
+ply:SetPos(20, 60)
+ply:SetSpeed(3)
+ply:SetSize(10)
 
-ply.x = 20
-ply.y = 60
-ply.radius = 10
-ply.speed = 5
 ply.shoot_delay = 0.1
 ply.next_attack = 0
-
----Returns the x and y Position of a Player
----@return integer
----@return integer
-function ply:GetPos()
-	return self.x, self.y
-end
 
 ---Returns if player can shoot
 ---@return boolean
@@ -79,10 +73,10 @@ function ply:ApplyMovement(dt)
 		end
 	end
 
-	local radius = self.radius
+	local size = self.size
 	local window_width, window_height = love.window.getMode()
-	self.x = math.Clamp(self.x, 0 + radius, window_width - radius)
-	self.y = math.Clamp(self.y, 0 + radius, window_height - radius)
+	self.x = math.Clamp(self.x, 0 + size, window_width - size)
+	self.y = math.Clamp(self.y, 0 + size, window_height - size)
 end
 
 function ply:Update(dt)
@@ -90,7 +84,7 @@ function ply:Update(dt)
 end
 
 function ply:Draw()
-	love.graphics.circle("fill", self.x, self.y, self.radius)
+	love.graphics.circle("fill", self.x, self.y, self.size)
 end
 
 return ply
