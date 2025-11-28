@@ -84,6 +84,7 @@ function ply:Update(dt)
 end
 
 function ply:Draw()
+	love.graphics.setColor(self:GetColor())
 	love.graphics.circle("fill", self.x, self.y, self.size)
 end
 

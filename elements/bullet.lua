@@ -6,8 +6,8 @@ local BulletObject = require("meta/bullet_meta")
 ---Creates a bullet with given Arguments
 ---@param owner any
 ---@param direction table
----@param radius integer
-function bullet:Create(owner, direction, radius)
+---@param size integer
+function bullet:Create(owner, direction, size)
     if not owner then return end
 
     if #direction ~= 2 then error("Direction must be a 2D vector") end
@@ -19,7 +19,7 @@ function bullet:Create(owner, direction, radius)
         direction = direction,
         x = x,
         y = y,
-        radius = radius,
+        size = size,
         speed = 1
     }, BulletObject)
 
@@ -34,17 +34,17 @@ function bullet:CheckInBounds()
         local b = bullets[i]
 
         if not b.keepAfterExit then
-            local radius = b.radius
+            local size = b.size
             local window_width, window_height = love.window.getMode()
 
             -- Check X
-            if b.x < 0 - radius or b.x > window_width + radius then
+            if b.x < 0 - size or b.x > window_width + size then
                 table.remove(bullets, i)
                 goto continue
             end
 
             -- Check Y
-            if b.y < 0 - radius or b.y > window_height + radius then
+            if b.y < 0 - size or b.y > window_height + size then
                 table.remove(bullets, i)
                 goto continue
             end
@@ -65,7 +65,7 @@ end
 
 function bullet:Draw()
     for _, b in ipairs(bullets) do
-        love.graphics.circle("fill", b.x, b.y, b.radius)
+        love.graphics.circle("fill", b.x, b.y, b.size)
     end
 end
 
