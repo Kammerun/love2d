@@ -80,8 +80,9 @@ function ply:ApplyMovement(dt)
 	end
 
 	local radius = self.radius
-	self.x = math.Clamp(self.x, 0 + radius, 1024 - radius)
-	self.y = math.Clamp(self.y, 0 + radius, 768 - radius)
+	local window_width, window_height = love.window.getMode()
+	self.x = math.Clamp(self.x, 0 + radius, window_width - radius)
+	self.y = math.Clamp(self.y, 0 + radius, window_height - radius)
 end
 
 function ply:Update(dt)

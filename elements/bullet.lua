@@ -35,15 +35,16 @@ function bullet:CheckInBounds()
 
         if not b.keepAfterExit then
             local radius = b.radius
+            local window_width, window_height = love.window.getMode()
 
             -- Check X
-            if b.x < 0 - radius or b.x > 1024 + radius then
+            if b.x < 0 - radius or b.x > window_width + radius then
                 table.remove(bullets, i)
                 goto continue
             end
 
             -- Check Y
-            if b.y < 0 - radius or b.y > 768 + radius then
+            if b.y < 0 - radius or b.y > window_height + radius then
                 table.remove(bullets, i)
                 goto continue
             end
@@ -58,6 +59,8 @@ function bullet:Update()
         b:Update()
     end
     self:CheckInBounds()
+
+    --- print(#bullets)
 end
 
 function bullet:Draw()
