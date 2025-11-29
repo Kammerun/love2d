@@ -69,4 +69,11 @@ function bullet:Draw()
     end
 end
 
+
+---Returns a Table with all existing Bullets
+---@return table
+function bullet:GetBullets()
+    return bullets
+end
+
 return bullet

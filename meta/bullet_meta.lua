@@ -1,9 +1,7 @@
-local BulletObject = {}
-BulletObject.__index = BulletObject
+local EntityObject = require("meta/entity_meta")
 
-function BulletObject:SetSpeed(speed)
-    self.speed = speed
-end
+local BulletObject = setmetatable({}, EntityObject)
+BulletObject.__index = BulletObject
 
 function BulletObject:Update()
     local speed = self.speed or 1
