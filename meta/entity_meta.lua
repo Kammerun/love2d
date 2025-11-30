@@ -6,6 +6,7 @@ EntityObject.y = 0
 EntityObject.size = 5
 EntityObject.speed = 0
 EntityObject.color = {r = 1, g = 1, b = 1}
+-- implement moving direction
 
 ---Returns the x and y Position of a Entity
 ---@return integer
@@ -62,6 +63,12 @@ function EntityObject:SetColor(r, g, b)
     self.color.r = r
     self.color.g = g
     self.color.b = b
+end
+
+function EntityObject:Draw()
+    love.graphics.setColor(self:GetColor())
+    local x, y = self:GetPos()
+    love.graphics.circle("fill", x, y, self:GetSize())
 end
 
 return EntityObject

@@ -1,5 +1,7 @@
 local game = {}
 
+game.level = 1
+
 ---Checks Collision from ply, bullets and enemys
 ---@param dt any
 ---@param ply any
@@ -25,8 +27,37 @@ function game:CheckCollisions(dt, ply, bullet, enemy)
                 table.remove(enemys, j)
             end
         end
-
     end
+
+    if #enemys == 0 then
+        print("DEBUG: Next Level")
+        self:NextLevel()
+    end
+end
+
+function game:GetLevel()
+    return self.level
+end
+
+function game:SetLevel(lvl)
+    self.level = lvl
+    self:HandleLevels()
+end
+
+function game:NextLevel()
+    self.level = self.level + 1
+    self:HandleLevels()
+end
+
+function game:HandleLevels()
+    local current_level = "level_" .. self:GetLevel()
+
+    local level = require("levels/" .. current_level)
+    if not level then
+        error("Error while loading level: " .. current_level)
+    end
+
+    level:Initialize()
 end
 
 return game

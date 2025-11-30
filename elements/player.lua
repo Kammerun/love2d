@@ -16,7 +16,7 @@ function ply:CanAttack()
 	local bCanAttack = true
 
 	if love.timer.getTime() < self.next_attack then
-		bCanAttack = false
+		bCanAttack = false --TODO: Just return false here?
 	end
 
 	return bCanAttack
@@ -73,7 +73,7 @@ function ply:ApplyMovement(dt)
 		end
 	end
 
-	local size = self.size
+	local size = self:GetSize()
 	local window_width, window_height = love.window.getMode()
 	self.x = math.Clamp(self.x, 0 + size, window_width - size)
 	self.y = math.Clamp(self.y, 0 + size, window_height - size)
